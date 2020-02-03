@@ -4,16 +4,16 @@ module.exports = {
 
   development: {
     client: 'sqlite3',
+    useNullAsDefault: true,
     connection: {
       filename: './database/spotify.db3'
     },
-    migrations:{
-        directory: './database/migrations'
+    migrations: {
+      directory: './database/migrations'
     },
     seeds: {
-        directory: './database/seeds'
+      directory: './database/seeds'
     }
-    
   },
 
   staging: {
