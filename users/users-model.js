@@ -4,7 +4,8 @@ module.exports = {
     find,
     add,
     findById,
-    findByUsername
+    findByUsername,
+    findFavoritesById
 }
 
 function find() {
@@ -25,4 +26,10 @@ function findByUsername(username) {
     return db('user')
     .where({ username })
     .first();
+};
+
+function findFavoritesById(id) {
+    return db('favorites').where('user_id', id)
+    .join('songs', 'favorites.song_id', 'songs.track_id')
+    .select('track_name', 'artist_name', 'track_id')
 };
