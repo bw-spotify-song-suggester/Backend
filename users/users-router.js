@@ -15,7 +15,7 @@ router.get('/dashboard/:id', (req, res) => {
       });
 })
 
-router.get('/favorites/:id', (req, res) => {
+router.get('dashboard/:id/favorites/', (req, res) => {
     console.log(req.params.id);
     Users.findFavoritesById(req.params.id)
     .then(list => {
