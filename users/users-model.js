@@ -2,6 +2,7 @@ const db = require('../database/dbConfig');
 
 module.exports = {
     find,
+    update,
     add,
     findById,
     findByUsername,
@@ -11,6 +12,10 @@ module.exports = {
 function find() {
     return db('user').select('id', 'username');
 };
+
+function update(changes, id) {
+    return db('user').where('user.id', id).update(changes);
+}
 
 function add(user) {
     return db('user').insert(user);
