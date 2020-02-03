@@ -1,14 +1,10 @@
-
-const restricted = require('../auth/restricted-middleware');
-
 const router = require('express').Router();
 const Users = require('./users-model.js');
+const restricted = require('../auth/restricted-middleware');
 
 router.get('/dashboard/:id', (req, res) => {
-    console.log(req.params.id)
     Users.findById(req.params.id)
     .then(user => {
-        console.log(user)
         res.status(200).json({ message: `Welcome home, ${user.username}`})
     })
     .catch(error => {
@@ -17,6 +13,18 @@ router.get('/dashboard/:id', (req, res) => {
           message: `NO!`,
         });
       });
+})
+
+router.get('/favorites/:id', (req, res) => {
+    console.log(req.params.id);
+    Users.findFavoritesById(req.params.id)
+    .then(list => {
+        res.status(200).json(list);
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ errorMessage: "Error getting favorites from database." })
+    })
 })
 
 module.exports = router;

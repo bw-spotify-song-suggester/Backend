@@ -29,7 +29,7 @@ function findByUsername(username) {
 };
 
 function findFavoritesById(id) {
-    return db('favorites').where('user_id', 'id')
+    return db('favorites').where('user_id', id)
     .join('songs', 'favorites.song_id', 'songs.track_id')
-    .select('track_name', 'artist_name')
-}
+    .select('track_name', 'artist_name', 'track_id')
+};
