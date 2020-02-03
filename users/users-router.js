@@ -13,9 +13,36 @@ router.get('/dashboard/:id', (req, res) => {
           message: `NO!`,
         });
       });
+});
+
+router.put('/dashboard/:id', (req, res) => {
+    console.log(req.body)
+    const changes = req.body;
+    Users.findById(req.params.id)
+    .then(user => {
+        console.log(user)
+        if(user){
+            console.log(changes)
+            Users.update(changes, req.params.id)
+            .then(updatedUser =>{
+                res.status(202).json(updatedUser)
+            })
+        } else {
+            res.status(404).json({message: 'Cannot Find user with given Id'})
+        }
+        
+    })
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({
+            message: 'Nein!'
+        });
+    });
 })
 
-router.get('dashboard/:id/favorites/', (req, res) => {
+
+
+router.get('/dashboard/:id/favorites/', (req, res) => {
     console.log(req.params.id);
     Users.findFavoritesById(req.params.id)
     .then(list => {
