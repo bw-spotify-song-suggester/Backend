@@ -2,7 +2,7 @@ const router = require('express').Router();
 const Users = require('./users-model.js');
 const restricted = require('../auth/restricted-middleware');
 
-router.get('/dashboard/:id', (req, res) => {
+router.get('/dashboard/:id', restricted, (req, res) => {
     Users.findById(req.params.id)
     .then(user => {
         res.status(200).json(user)
@@ -15,7 +15,7 @@ router.get('/dashboard/:id', (req, res) => {
       });
 });
 
-router.put('/dashboard/:id', (req, res) => {
+router.put('/dashboard/:id', restricted, (req, res) => {
     const changes = req.body;
     Users.findById(req.params.id)
     .then(user => {
@@ -39,7 +39,7 @@ router.put('/dashboard/:id', (req, res) => {
 
 
 
-router.get('/dashboard/:id/favorites/', (req, res) => {
+router.get('/dashboard/:id/favorites/', restricted, (req, res) => {
     console.log(req.params.id);
     Users.findFavoritesById(req.params.id)
     .then(list => {
@@ -53,7 +53,7 @@ router.get('/dashboard/:id/favorites/', (req, res) => {
 
 
 
-router.delete("/dashboard/:id", (req, res) => {
+router.delete("/dashboard/:id", restricted, (req, res) => {
     Users.remove(req.params.id)
     .then(count => {
       if (count > 0) {
@@ -64,5 +64,5 @@ router.delete("/dashboard/:id", (req, res) => {
     })
   })
 
-  
+
 module.exports = router;
