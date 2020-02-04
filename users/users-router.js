@@ -90,5 +90,22 @@ router.delete("/dashboard/:id", (req, res) => {
     })
   })
 
+
+
+  router.get("/dashboard/logout", (req, res) =>{
+      if(req.token) {
+          req.token.destroy(err => {
+              if (err) {
+                  res.json({
+                      message: 'Welcome to the Hotel California.'
+                  })
+              } else {
+                  res.status(200).json({ message: "You're free!"})
+              }
+          })
+      } else {
+          res.status(200).json({ message: "How are you logging out without ever having logged in? Are you mad?"})
+      }
+  })
   
 module.exports = router;
