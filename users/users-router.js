@@ -16,13 +16,10 @@ router.get('/dashboard/:id', (req, res) => {
 });
 
 router.put('/dashboard/:id', (req, res) => {
-    console.log(req.body)
     const changes = req.body;
     Users.findById(req.params.id)
     .then(user => {
-        console.log(user)
         if(user){
-            console.log(changes)
             Users.update(changes, req.params.id)
             .then(updatedUser =>{
                 res.status(202).json(updatedUser)
