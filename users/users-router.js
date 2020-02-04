@@ -5,12 +5,12 @@ const restricted = require('../auth/restricted-middleware');
 router.get('/dashboard/:id', (req, res) => {
     Users.findById(req.params.id)
     .then(user => {
-        res.status(200).json({ message: `Welcome home, ${user.username}`})
+        res.status(200).json(user)
     })
     .catch(error => {
         console.log(error);
         res.status(500).json({
-          message: `NO!`,
+          message: `Error getting user from database.`,
         });
       });
 });
@@ -25,7 +25,7 @@ router.put('/dashboard/:id', (req, res) => {
                 res.status(202).json(updatedUser)
             })
         } else {
-            res.status(404).json({message: 'Cannot Find user with given Id'})
+            res.status(404).json({message: 'Cannot Find user with given id.'})
         }
         
     })
@@ -51,4 +51,18 @@ router.get('/dashboard/:id/favorites/', (req, res) => {
     })
 })
 
+
+
+router.delete("/dashboard/:id", (req, res) => {
+    Users.remove(req.params.id)
+    .then(count => {
+      if (count > 0) {
+        res.status(200).json({ message: `Goodbye!` });
+      } else {
+        res.status(404).json({ message: `Not found!` });
+      }
+    })
+  })
+
+  
 module.exports = router;
