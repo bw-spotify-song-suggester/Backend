@@ -39,8 +39,7 @@ router.put('/dashboard/:id', (req, res) => {
 
 
 
-router.get('/dashboard/:id/favorites/', (req, res) => {
-    console.log(req.params.id);
+router.get('/dashboard/:id/favorites', (req, res) => {
     Users.findFavoritesById(req.params.id)
     .then(list => {
         res.status(200).json(list);
@@ -49,6 +48,33 @@ router.get('/dashboard/:id/favorites/', (req, res) => {
         console.log(err)
         res.status(500).json({ errorMessage: "Error getting favorites from database." })
     })
+})
+
+
+router.post('/dashboard/:id/favorites', (req, res) => {
+    console.log(req.body)
+    Users.addToFavorites(req.body)
+  .then(user => {
+    res.status(201).json(user);
+  })
+  .catch(error => {
+    console.log(error);
+    res.status(500).json({
+      message: "Back-End's Fault, Buddy!",
+    });
+  });
+});
+
+
+router.delete('/dashboard/:id/favorites', (req, res) => {
+    Users.removeSong(req.body)
+  .then(count => {
+    if (count > 0) {
+      res.status(200).json({ message: 'It came tumbling down!' });
+    } else {
+      res.status(404).json({ message: 'Cannot find song and neither can you!' });
+    }
+  })
 })
 
 
