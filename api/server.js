@@ -9,12 +9,7 @@ server.use(helmet());
 server.use(express.json());
 server.use('/api/auth', authRouter);
 server.use('/api/user', userRouter);
-server.use(
-    cors({
-        credentials: true,
-        origin: true
-    })
-);
-server.options('*', cors());
+server.use(cors());
+
 
 module.exports = server;
