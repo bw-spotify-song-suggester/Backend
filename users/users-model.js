@@ -4,6 +4,7 @@ module.exports = {
     find,
     update,
     add,
+    remove,
     findById,
     findByUsername,
     findFavoritesById
@@ -38,3 +39,9 @@ function findFavoritesById(id) {
     .join('songs', 'favorites.song_id', 'songs.track_id')
     .select('track_name', 'artist_name', 'track_id')
 };
+
+function remove(id) {
+    return db('user')
+    .where('user.id', id)
+    .del()
+}

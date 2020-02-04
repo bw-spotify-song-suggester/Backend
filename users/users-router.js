@@ -51,4 +51,16 @@ router.get('/dashboard/:id/favorites/', (req, res) => {
     })
 })
 
+
+
+router.delete("/dashboard/:id", (req, res) => {
+    Users.remove(req.params.id)
+    .then(count => {
+      if (count > 0) {
+        res.status(200).json({ message: `Goodbye!.` });
+      } else {
+        res.status(404).json({ message: `Not found!` });
+      }
+    })
+  })
 module.exports = router;
