@@ -4,7 +4,9 @@ module.exports = {
     find,
     update,
     add,
+    addToFavorites,
     remove,
+    removeSong,
     findById,
     findByUsername,
     findFavoritesById
@@ -20,6 +22,14 @@ function update(changes, id) {
 
 function add(user) {
     return db('user').insert(user);
+};
+
+function addToFavorites(fav) {
+    return db('favorites')
+      .insert(fav)
+      .then(ids => {
+        return findById(ids[0]);
+      });
 };
 
 function findById(id) {
@@ -45,3 +55,9 @@ function remove(id) {
     .where('user.id', id)
     .del()
 }
+
+function removeSong(id) {
+    return db('favorites')
+      .where(id)
+      .del();
+  }
