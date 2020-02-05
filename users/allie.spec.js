@@ -12,7 +12,7 @@ describe('test register', function () {
   it('shows status 201', async function (done) {
     request
       .post('/api/auth/register')
-      .send({ username: 'chance3', password: '111111' })
+      .send({ username: 'test5', password: 'test' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(201)
@@ -25,7 +25,7 @@ describe('test register', function () {
   it('shows status 500', async function (done) {
     request
       .post('/api/auth/register')
-      .send({ username: 'chance', password: '211111' })
+      .send({ username: 'test1', password: 'test' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(500)
@@ -43,7 +43,7 @@ describe('test login', function () {
   it('shows status 200', async function (done) {
     request
       .post('/api/auth/login')
-      .send({ username: 'allie', password: '222222' })
+      .send({ username: 'test1', password: 'test' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200)
@@ -56,7 +56,7 @@ describe('test login', function () {
   it('shows status 401', async function (done) {
     request
       .post('/api/auth/login')
-      .send({ username: 'allie', password: '522222' })
+      .send({ username: 'test', password: '000000' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(401)
@@ -66,20 +66,19 @@ describe('test login', function () {
       });
   })
 
-  it('shows status 500', async function (done) {
+  it('shows status 400', async function (done) {
     request
       .post('/api/auth/login')
-      .send({ name: 'chance', password: '111111' })
+      .send({ what: 'test' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(500)
+      .expect(400)
       .end(function (err, res) {
         if (err) return done(err);
         done();
       });
   })
 });
-
 
 
 // These also work with no need to change anything 
@@ -90,8 +89,8 @@ beforeAll((done) => {
   request
     .post('/api/auth/login')
     .send({
-      username: 'allie',
-      password: '222222',
+      username: 'test1',
+      password: 'test',
     })
     .end((err, response) => {
       token = response.body.token; // save the token!

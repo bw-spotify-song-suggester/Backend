@@ -16,6 +16,21 @@ module.exports = {
     }
   },
 
+  testing: {
+    client: 'sqlite3',
+    useNullAsDefault: true,
+    connection: { 
+      filename: './database/testing/spotifyTesting.db3' 
+    },
+    useNullAsDefault: true,
+    migrations: {
+      directory: './database/testing/migrations'
+    },
+    seeds: {
+      directory: './database/testing/seeds'
+    }
+  },
+
   staging: {
     client: 'postgresql',
     connection: {

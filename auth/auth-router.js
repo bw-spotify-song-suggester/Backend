@@ -58,7 +58,7 @@ function authMiddleware(req, res, next) {
     const username = req.body.username;
     const password = req.body.password;
     if (!username || !password) {
-        return res.json({ errorMessage: "Invalid request. Please input both a username and password." })
+        return res.status(400).json({ errorMessage: "Invalid request. Please input both a username and password." })
     } else {
         next();
     }
