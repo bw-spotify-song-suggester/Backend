@@ -8,12 +8,32 @@ describe('test login', function (){
     it('shows status 200', async function (done){
         request
         .post('/api/auth/login')
-        .send({ username: 'test', password: 'test'})
-        .set('Accept', 'application/jason')
+        .send({
+          username: 'BaronHarkonnen',
+          password: 'test',
+        })
         .expect(200)
-        .end(function(err, res){
-            if (err) return done (err);
-            done();
+        .end((err, response) => {
+          token = response.body.token; 
+          console.log(token)
+          done();
         });
     });
-})
+});
+
+describe('test register', function (){
+    it('shows status 201', async function (done){
+        request
+        .post('/api/auth/register')
+        .send({
+          username: 'test2',
+          password: 'test',
+        })
+        .expect(201)
+        .end((err, response) => {
+          token = response.body.token; 
+          console.log(token)
+          done();
+        });
+    });
+});

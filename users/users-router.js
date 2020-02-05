@@ -2,6 +2,20 @@ const router = require('express').Router();
 const Users = require('./users-model.js');
 const restricted = require('../auth/restricted-middleware');
 
+
+
+router.get('/dashboard/:id/songs', (req, res) => {
+    Users.getAllSongs()
+    .then(songs => {
+      res.status(200).json(songs);
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
+});
+
+
+
 router.get('/dashboard/:id', restricted, (req, res) => {
     Users.findById(req.params.id)
         .then(user => {
