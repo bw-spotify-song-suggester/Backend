@@ -64,11 +64,11 @@ router.post('/dashboard/:id/favorites', favoriteAuth, (req, res) => {
 });
 
 
-router.delete('/dashboard/:id/favorites', (req, res) => {
+router.delete('/dashboard/:id/favorites', deleteFavMiddleware, (req, res) => {
     Users.removeSong(req.body)
         .then(count => {
             if (count > 0) {
-                res.status(200).json({ message: 'It came tumbling down!' });
+                res.status(200).json({ message: 'Favorite successfully deleted.' });
             } else {
                 res.status(404).json({ message: 'Cannot find song and neither can you!' });
             }
@@ -80,9 +80,9 @@ router.delete("/dashboard/:id", restricted, (req, res) => {
     Users.remove(req.params.id)
         .then(count => {
             if (count > 0) {
-                res.status(200).json({ message: `Goodbye!` });
+                res.status(200).json({ message: `User successfully deleted. Goodbye!` });
             } else {
-                res.status(404).json({ message: `Not found!` });
+                res.status(404).json({ message: `User with given id does not exist.` });
             }
         })
 })
@@ -122,6 +122,15 @@ function authMiddleware(req, res, next) {
     const password = req.body.password;
     if (!username || !password) {
         return res.json({ errorMessage: "Invalid request. Please input both a username and password." })
+    } else {
+        next();
+    }
+}
+
+function deleteFavMiddleware(req, res, next) {
+    const song_id = req.body.song_id;
+    if (!song_id) {
+        return res.json({ errorMessage: "Invalid request. Please send a song_id in the request body with your delete request." })
     } else {
         next();
     }
