@@ -41,6 +41,7 @@ router.post('/login', authMiddleware, (req, res) => {
         });
 });
 
+
 function signToken(user) {
     const payload = {
         id: user.id

@@ -7,6 +7,7 @@ module.exports = {
     addToFavorites,
     remove,
     removeSong,
+    getAllSongs,
     findById,
     findByUsername,
     findFavoritesById
@@ -38,6 +39,11 @@ function findById(id) {
         .where({ id })
         .first();
 };
+
+function getAllSongs() {
+    return db('songs')
+        
+}
 
 function findByUsername(username) {
     return db('user')
