@@ -9,10 +9,10 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('user').insert([
-        {username: 'BaronHarkonnen', password: hash},
-        {username: 'HarryPotter', password: hash},
-        {username: 'Gandalf', password: hash},
-        {username: 'test', password: hash}
+        {id: 1, username: 'BaronHarkonnen', password: hash},
+        {id: 2, username: 'HarryPotter', password: hash},
+        {id: 3, username: 'Gandalf', password: hash},
+        {id: 4, username: 'test', password: hash}
       ]);
     });
 };

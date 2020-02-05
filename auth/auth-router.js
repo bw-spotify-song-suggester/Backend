@@ -6,7 +6,7 @@ const { jwtSecret } = require('../config/secrets');
 
 const Users = require('../users/users-model');
 
-router.post('/register', (req, res) => {
+router.post('/register', authMiddleware, (req, res) => {
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, 11);
     user.password = hash;
@@ -22,7 +22,7 @@ router.post('/register', (req, res) => {
 });
 
 
-router.post('/login', (req, res) => {
+router.post('/login', authMiddleware, (req, res) => {
     let { username, password } = req.body;
 
     Users.findByUsername(username)
@@ -41,11 +41,6 @@ router.post('/login', (req, res) => {
         });
 });
 
-
-
-
-
-
 function signToken(user) {
     const payload = {
         id: user.id
@@ -57,5 +52,16 @@ function signToken(user) {
 
     return jwt.sign(payload, jwtSecret, options);
 };
+
+// custom middleware
+function authMiddleware(req, res, next) {
+    const username = req.body.username;
+    const password = req.body.password;
+    if (!username || !password) {
+        return res.json({ errorMessage: "Invalid request. Please input both a username and password." })
+    } else {
+        next();
+    }
+}
 
 module.exports = router;

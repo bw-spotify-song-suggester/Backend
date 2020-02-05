@@ -15,7 +15,7 @@ router.get('/dashboard/:id', restricted, (req, res) => {
         });
 });
 
-router.put('/dashboard/:id', restricted, (req, res) => {
+router.put('/dashboard/:id', restricted, authMiddleware, (req, res) => {
     const changes = req.body;
     Users.findById(req.params.id)
         .then(user => {
@@ -25,18 +25,17 @@ router.put('/dashboard/:id', restricted, (req, res) => {
                         res.status(202).json(updatedUser)
                     })
             } else {
-                res.status(404).json({ message: 'Cannot Find user with given id.' })
+                res.status(404).json({ message: 'User with given id does not exist.' })
             }
 
         })
         .catch(error => {
             console.log(error);
             res.status(500).json({
-                message: 'Nein!'
+                message: 'Error posting edited user to database.'
             });
         });
 })
-
 
 
 router.get('/dashboard/:id/favorites', (req, res) => {
@@ -51,26 +50,25 @@ router.get('/dashboard/:id/favorites', (req, res) => {
 })
 
 
-router.post('/dashboard/:id/favorites', (req, res) => {
-    console.log(req.body)
+router.post('/dashboard/:id/favorites', favoriteAuth, (req, res) => {
     Users.addToFavorites(req.body)
-        .then(user => {
-            res.status(201).json(user);
+        .then(favList => {
+            res.status(201).json(favList);
         })
         .catch(error => {
             console.log(error);
             res.status(500).json({
-                message: "Back-End's Fault, Buddy!",
+                message: "Error posting favorite to the database.",
             });
         });
 });
 
 
-router.delete('/dashboard/:id/favorites', (req, res) => {
+router.delete('/dashboard/:id/favorites', deleteFavMiddleware, (req, res) => {
     Users.removeSong(req.body)
         .then(count => {
             if (count > 0) {
-                res.status(200).json({ message: 'It came tumbling down!' });
+                res.status(200).json({ message: 'Favorite successfully deleted.' });
             } else {
                 res.status(404).json({ message: 'Cannot find song and neither can you!' });
             }
@@ -78,18 +76,16 @@ router.delete('/dashboard/:id/favorites', (req, res) => {
 })
 
 
-
 router.delete("/dashboard/:id", restricted, (req, res) => {
     Users.remove(req.params.id)
         .then(count => {
             if (count > 0) {
-                res.status(200).json({ message: `Goodbye!` });
+                res.status(200).json({ message: `User successfully deleted. Goodbye!` });
             } else {
-                res.status(404).json({ message: `Not found!` });
+                res.status(404).json({ message: `User with given id does not exist.` });
             }
         })
 })
-
 
 
 router.get("/dashboard/logout", (req, res) => {
@@ -107,5 +103,37 @@ router.get("/dashboard/logout", (req, res) => {
         res.status(200).json({ message: "How are you logging out without ever having logged in? Are you mad?" })
     }
 })
+
+
+// custom middleware
+
+function favoriteAuth(req, res, next) {
+    const song_id = req.body.song_id;
+    const user_id = req.body.user_id;
+    if (!song_id || !user_id) {
+        return res.json({ errorMessage: "Invalid request. Please send both a song_id and user_id." })
+    } else {
+        next();
+    }
+}
+
+function authMiddleware(req, res, next) {
+    const username = req.body.username;
+    const password = req.body.password;
+    if (!username || !password) {
+        return res.json({ errorMessage: "Invalid request. Please input both a username and password." })
+    } else {
+        next();
+    }
+}
+
+function deleteFavMiddleware(req, res, next) {
+    const song_id = req.body.song_id;
+    if (!song_id) {
+        return res.json({ errorMessage: "Invalid request. Please send a song_id in the request body with your delete request." })
+    } else {
+        next();
+    }
+}
 
 module.exports = router;
