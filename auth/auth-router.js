@@ -13,7 +13,7 @@ router.post('/register', authMiddleware, (req, res) => {
 
     Users.add(user)
         .then(id => {
-            res.status(201).json({ message: `User with id ${id} successfully added to database.` });
+            res.status(201).json({ id: `${id}` });
         })
         .catch(err => {
             console.log(err);
