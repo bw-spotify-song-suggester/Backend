@@ -5,14 +5,14 @@ const server = require('../api/server');
 const request = supertest(server);
 
 
-// This test works! You might have to change the username to something unique in the 
+// Register tests - These work! You might have to change the username to something unique in the 
 // status 201 test to see it work properly.
 
 describe('test register', function () {
   it('shows status 201', async function (done) {
     request
       .post('/api/auth/register')
-      .send({ username: 'chance3', password: '111111' })
+      .send({ username: 'test6', password: 'test' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(201)
@@ -25,7 +25,7 @@ describe('test register', function () {
   it('shows status 500', async function (done) {
     request
       .post('/api/auth/register')
-      .send({ username: 'chance', password: '211111' })
+      .send({ username: 'test1', password: 'test' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(500)
@@ -37,13 +37,13 @@ describe('test register', function () {
 });
 
 
-// This test works! It will work every time, no need to change anything. 
+// Login tests
 
 describe('test login', function () {
   it('shows status 200', async function (done) {
     request
       .post('/api/auth/login')
-      .send({ username: 'allie', password: '222222' })
+      .send({ username: 'test1', password: 'test' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200)
@@ -56,7 +56,7 @@ describe('test login', function () {
   it('shows status 401', async function (done) {
     request
       .post('/api/auth/login')
-      .send({ username: 'allie', password: '522222' })
+      .send({ username: 'test', password: '000000' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(401)
@@ -66,13 +66,13 @@ describe('test login', function () {
       });
   })
 
-  it('shows status 500', async function (done) {
+  it('shows status 400', async function (done) {
     request
       .post('/api/auth/login')
-      .send({ name: 'chance', password: '111111' })
+      .send({ what: 'test' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(500)
+      .expect(400)
       .end(function (err, res) {
         if (err) return done(err);
         done();
@@ -81,17 +81,14 @@ describe('test login', function () {
 });
 
 
-
-// These also work with no need to change anything 
-
 let token;
 
 beforeAll((done) => {
   request
     .post('/api/auth/login')
     .send({
-      username: 'allie',
-      password: '222222',
+      username: 'test1',
+      password: 'test',
     })
     .end((err, response) => {
       token = response.body.token; // save the token!
@@ -99,6 +96,8 @@ beforeAll((done) => {
       done();
     });
 });
+
+// GET request tests
 
 describe('GET /', () => {
   // token not being sent - should respond with a 401
@@ -126,6 +125,36 @@ describe('GET /', () => {
       .set('Authorization', `${token}`)
       .then((response) => {
         expect(response.statusCode).toBe(200);
+        expect(response.type).toBe('application/json');
+      });
+  });
+});
+
+
+// POST tests
+
+describe('POST /', () => {
+  // token not being sent - should respond with a 401
+  test('It should require authorization', () => {
+    return request
+      .post('/api/user/dashboard/1/favorites')
+      .send({ song_id: 'test', user_id: '1' })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .then((response) => {
+        expect(response.statusCode).toBe(401);
+      });
+  });
+  // send the token - should respond with a 200
+  test('favorites responds with JSON and 201', () => {
+    return request
+      .post('/api/user/dashboard/1/favorites')
+      .set('Authorization', `${token}`)
+      .send({ song_id: 'test', user_id: '1' })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .then((response) => {
+        expect(response.statusCode).toBe(201);
         expect(response.type).toBe('application/json');
       });
   });

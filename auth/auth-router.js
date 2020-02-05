@@ -13,7 +13,7 @@ router.post('/register', authMiddleware, (req, res) => {
 
     Users.add(user)
         .then(id => {
-            res.status(201).json({ message: `User with id ${id} successfully added to database.` });
+            res.status(201).json({ id: `${id}` });
         })
         .catch(err => {
             console.log(err);
@@ -58,7 +58,7 @@ function authMiddleware(req, res, next) {
     const username = req.body.username;
     const password = req.body.password;
     if (!username || !password) {
-        return res.json({ errorMessage: "Invalid request. Please input both a username and password." })
+        return res.status(400).json({ errorMessage: "Invalid request. Please input both a username and password." })
     } else {
         next();
     }
