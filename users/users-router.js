@@ -15,7 +15,7 @@ router.get('/dashboard/:id', restricted, (req, res) => {
         });
 });
 
-router.put('/dashboard/:id', restricted, (req, res) => {
+router.put('/dashboard/:id', restricted, authMiddleware, (req, res) => {
     const changes = req.body;
     Users.findById(req.params.id)
         .then(user => {
@@ -38,7 +38,6 @@ router.put('/dashboard/:id', restricted, (req, res) => {
 })
 
 
-
 router.get('/dashboard/:id/favorites', (req, res) => {
     Users.findFavoritesById(req.params.id)
         .then(list => {
@@ -51,10 +50,10 @@ router.get('/dashboard/:id/favorites', (req, res) => {
 })
 
 
-router.post('/dashboard/:id/favorites', (req, res) => {
+router.post('/dashboard/:id/favorites', favoriteAuth, (req, res) => {
     Users.addToFavorites(req.body)
-        .then(user => {
-            res.status(201).json(user);
+        .then(favList => {
+            res.status(201).json(favList);
         })
         .catch(error => {
             console.log(error);
@@ -77,7 +76,6 @@ router.delete('/dashboard/:id/favorites', (req, res) => {
 })
 
 
-
 router.delete("/dashboard/:id", restricted, (req, res) => {
     Users.remove(req.params.id)
         .then(count => {
@@ -88,7 +86,6 @@ router.delete("/dashboard/:id", restricted, (req, res) => {
             }
         })
 })
-
 
 
 router.get("/dashboard/logout", (req, res) => {
@@ -106,5 +103,28 @@ router.get("/dashboard/logout", (req, res) => {
         res.status(200).json({ message: "How are you logging out without ever having logged in? Are you mad?" })
     }
 })
+
+
+// custom middleware
+
+function favoriteAuth(req, res, next) {
+    const song_id = req.body.song_id;
+    const user_id = req.body.user_id;
+    if (!song_id || !user_id) {
+        return res.json({ errorMessage: "Invalid request. Please send both a song_id and user_id." })
+    } else {
+        next();
+    }
+}
+
+function authMiddleware(req, res, next) {
+    const username = req.body.username;
+    const password = req.body.password;
+    if (!username || !password) {
+        return res.json({ errorMessage: "Invalid request. Please input both a username and password." })
+    } else {
+        next();
+    }
+}
 
 module.exports = router;
