@@ -15,7 +15,7 @@ router.get('/dashboard/:id', restricted, (req, res) => {
         });
 });
 
-router.put('/dashboard/:id', restricted, authMiddleware, (req, res) => {
+router.put('/dashboard/:id', restricted, (req, res) => {
     const changes = req.body;
     Users.findById(req.params.id)
         .then(user => {
