@@ -111,7 +111,7 @@ function favoriteAuth(req, res, next) {
     const song_id = req.body.song_id;
     const user_id = req.body.user_id;
     if (!song_id || !user_id) {
-        return res.json({ errorMessage: "Invalid request. Please send both a song_id and user_id." })
+        return res.status(400).json({ errorMessage: "Invalid request. Please send both a song_id and user_id." })
     } else {
         next();
     }
@@ -121,7 +121,7 @@ function authMiddleware(req, res, next) {
     const username = req.body.username;
     const password = req.body.password;
     if (!username || !password) {
-        return res.json({ errorMessage: "Invalid request. Please input both a username and password." })
+        return res.status(400).json({ errorMessage: "Invalid request. Please input both a username and password." })
     } else {
         next();
     }
@@ -130,7 +130,7 @@ function authMiddleware(req, res, next) {
 function deleteFavMiddleware(req, res, next) {
     const song_id = req.body.song_id;
     if (!song_id) {
-        return res.json({ errorMessage: "Invalid request. Please send a song_id in the request body with your delete request." })
+        return res.status(400).json({ errorMessage: "Invalid request. Please send a song_id in the request body with your delete request." })
     } else {
         next();
     }
