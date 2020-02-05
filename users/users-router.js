@@ -25,14 +25,14 @@ router.put('/dashboard/:id', restricted, (req, res) => {
                         res.status(202).json(updatedUser)
                     })
             } else {
-                res.status(404).json({ message: 'Cannot Find user with given id.' })
+                res.status(404).json({ message: 'User with given id does not exist.' })
             }
 
         })
         .catch(error => {
             console.log(error);
             res.status(500).json({
-                message: 'Nein!'
+                message: 'Error posting edited user to database.'
             });
         });
 })
@@ -52,7 +52,6 @@ router.get('/dashboard/:id/favorites', (req, res) => {
 
 
 router.post('/dashboard/:id/favorites', (req, res) => {
-    console.log(req.body)
     Users.addToFavorites(req.body)
         .then(user => {
             res.status(201).json(user);
@@ -60,7 +59,7 @@ router.post('/dashboard/:id/favorites', (req, res) => {
         .catch(error => {
             console.log(error);
             res.status(500).json({
-                message: "Back-End's Fault, Buddy!",
+                message: "Error posting favorite to the database.",
             });
         });
 });

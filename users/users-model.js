@@ -26,38 +26,45 @@ function add(user) {
 
 function addToFavorites(fav) {
     return db('favorites')
-      .insert(fav)
-      .then(ids => {
-        return findById(ids[0]);
-      });
+        .insert(fav)
+        .then(ids => {
+            [ ids ] = ids   
+            return findFavoritesById(fav.user_id);
+        });
 };
 
 function findById(id) {
     return db('user')
-    .where({ id })
-    .first();
+        .where({ id })
+        .first();
 };
 
 function findByUsername(username) {
     return db('user')
-    .where({ username })
-    .first();
+        .where({ username })
+        .first();
 };
 
 function findFavoritesById(id) {
     return db('favorites').where('user_id', id)
-    .join('songs', 'favorites.song_id', 'songs.track_id')
-    .select('track_name', 'artist_name', 'track_id')
+        .join('songs', 'favorites.song_id', 'songs.track_id')
+        .select('track_name', 'artist_name', 'track_id')
+};
+
+function findFavoritesBySongId(id) {
+    return db('favorites').where('song_id', id)
+        .join('songs', 'favorites.song_id', 'songs.track_id')
+        .select('track_name', 'artist_name', 'track_id')
 };
 
 function remove(id) {
     return db('user')
-    .where('user.id', id)
-    .del()
+        .where('user.id', id)
+        .del()
 }
 
-function removeSong(id) {
+function removeSong(song_id) {
     return db('favorites')
-      .where(id)
-      .del();
-  }
+        .where(song_id)
+        .del();
+}
