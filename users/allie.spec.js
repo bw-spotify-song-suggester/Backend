@@ -5,14 +5,14 @@ const server = require('../api/server');
 const request = supertest(server);
 
 
-// This test works! You might have to change the username to something unique in the 
+// Register tests - These work! You might have to change the username to something unique in the 
 // status 201 test to see it work properly.
 
 describe('test register', function () {
   it('shows status 201', async function (done) {
     request
       .post('/api/auth/register')
-      .send({ username: 'test5', password: 'test' })
+      .send({ username: 'test6', password: 'test' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(201)
@@ -37,7 +37,7 @@ describe('test register', function () {
 });
 
 
-// This test works! It will work every time, no need to change anything. 
+// Login tests
 
 describe('test login', function () {
   it('shows status 200', async function (done) {
@@ -81,8 +81,6 @@ describe('test login', function () {
 });
 
 
-// These also work with no need to change anything 
-
 let token;
 
 beforeAll((done) => {
@@ -98,6 +96,8 @@ beforeAll((done) => {
       done();
     });
 });
+
+// GET request tests
 
 describe('GET /', () => {
   // token not being sent - should respond with a 401
@@ -125,6 +125,36 @@ describe('GET /', () => {
       .set('Authorization', `${token}`)
       .then((response) => {
         expect(response.statusCode).toBe(200);
+        expect(response.type).toBe('application/json');
+      });
+  });
+});
+
+
+// POST tests
+
+describe('POST /', () => {
+  // token not being sent - should respond with a 401
+  test('It should require authorization', () => {
+    return request
+      .post('/api/user/dashboard/1/favorites')
+      .send({ song_id: 'test', user_id: '1' })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .then((response) => {
+        expect(response.statusCode).toBe(401);
+      });
+  });
+  // send the token - should respond with a 200
+  test('favorites responds with JSON and 201', () => {
+    return request
+      .post('/api/user/dashboard/1/favorites')
+      .set('Authorization', `${token}`)
+      .send({ song_id: 'test', user_id: '1' })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .then((response) => {
+        expect(response.statusCode).toBe(201);
         expect(response.type).toBe('application/json');
       });
   });
