@@ -71,6 +71,6 @@ function remove(id) {
 
 function removeSong(song_id) {
     return db('favorites')
-        .where(song_id.song_id)
+        .where('song_id', song_id)
         .del();
 }
