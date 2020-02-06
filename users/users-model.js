@@ -41,7 +41,7 @@ function findById(id) {
 };
 
 function getAllSongs() {
-    return db('songslist')
+    return db('songs')
         
 }
 
@@ -59,10 +59,10 @@ function findFavoritesById(id) {
 
 function findFavoritesBySongId(id) {
     return db('favorites').where('song_id', id)
-        .join('songslist', 'favorites.song_id', 'songslist.track_id')
+        .join('songs', 'favorites.song_id', 'songs.track_id')
         .select('track_name', 'artist_name', 'track_id')
 };
-
+ 
 function remove(id) {
     return db('user')
         .where('user.id', id)
