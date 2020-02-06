@@ -78,7 +78,7 @@ router.post('/dashboard/:id/favorites', favoriteAuth, (req, res) => {
 });
 
 
-router.delete('/dashboard/:id/favorites', deleteFavMiddleware, (req, res) => {
+router.delete('/dashboard/:id/favorites', (req, res) => {
     Users.removeSong(req.body)
         .then(count => {
             if (count > 0) {
