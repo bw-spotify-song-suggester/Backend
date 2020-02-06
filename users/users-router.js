@@ -84,7 +84,7 @@ router.delete('/dashboard/:id/favorites', deleteFavMiddleware, (req, res) => {
             if (count > 0) {
                 res.status(200).json({ message: 'Favorite successfully deleted.' });
             } else {
-                res.status(404).json({ message: 'Cannot find song and neither can you!' });
+                res.status(404).json({ message: 'Cannot find song with id.' });
             }
         })
 })
