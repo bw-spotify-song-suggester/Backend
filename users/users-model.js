@@ -62,15 +62,15 @@ function findFavoritesBySongId(id) {
         .join('songs', 'favorites.song_id', 'songs.track_id')
         .select('track_name', 'artist_name', 'track_id')
 };
- 
+
 function remove(id) {
     return db('user')
-        .where('song_id.song_id', id)
+        .where('user.id', id)
         .del()
 }
 
 function removeSong(song_id) {
     return db('favorites')
-        .where(song_id.song_id)
+        .where(song_id)
         .del();
 }
