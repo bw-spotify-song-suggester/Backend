@@ -80,7 +80,7 @@ router.post('/dashboard/:id/favorites', favoriteAuth, (req, res) => {
 
 router.delete('/dashboard/:id/favorites/:song_id', (req, res) => {
     console.log("req.body", req.body);
-    Users.removeSong(req.params.song_id)
+    Users.removeSong(req.params.id, req.params.song_id)
         .then(count => {
             if (count > 0) {
                 res.status(200).json({ message: 'Favorite successfully deleted.' });
